@@ -182,5 +182,5 @@ with col2:
     st.header("Fähigkeiten")
     
     for key, value in data["skills"].items():
-        st.write(f"**{key}:** \n {value}")
+        st.write(f"**{key}:**  \n{value}")
     
