@@ -130,27 +130,27 @@ if data["name"][1] == "w":
 col1, col2= st.columns(2)
 
 with col1:
-    st.write("Geschicke")
-    st.write("**Stärke**")
+    st.header("Geschicke")
+    st.subheader("**Stärke**")
     st.number_input("Kraft",-10,10, data["fates"]["STÄ"]["Kraft"])
     st.number_input("Kraft",-10,10, data["fates"]["STÄ"]["Überlf"])
-    st.write("**Intelligenz**")
+    st.subheader("**Intelligenz**")
     st.number_input("Kreativität",-10,10, data["fates"]["INT"]["Kreat"])
     st.number_input("Entlarvung",-10,10, data["fates"]["INT"]["Entlarv"])
     st.number_input("Wahrnehmung",-10,10, data["fates"]["INT"]["Wahrn"])
     st.number_input("Nachforschung",-10,10, data["fates"]["INT"]["Nachfor"])
     st.number_input("Naturkunde",-10,10, data["fates"]["INT"]["Naturk"])
-    st.write("**Wissen**")
+    st.subheader("**Wissen**")
     st.number_input("Religion",-10,10, data["fates"]["WIS"]["Rel"])
     st.number_input("Geschichte",-10,10, data["fates"]["WIS"]["Gesch"])
     st.number_input("Medizin",-10,10, data["fates"]["WIS"]["Med"])
     st.number_input("Technik",-10,10, data["fates"]["WIS"]["Tech"])
     st.number_input("Umgang mit Tieren",-10,10, data["fates"]["WIS"]["UmgTiere"])
-    st.write("**Geschicklichkeit**")
+    st.subheader("**Geschicklichkeit**")
     st.number_input("Akrobatik",-10,10, data["fates"]["GES"]["Akro"])
     st.number_input("Verstohlenheit",-10,10, data["fates"]["GES"]["Verst"])
     st.number_input("Fingerfertigkeit",-10,10, data["fates"]["GES"]["Fingerf"])
-    st.write("**Charisma**")
+    st.subheader("**Charisma**")
     st.number_input("Überzeugungsfähigkeit",-10,10, data["fates"]["CHA"]["Überzeug"])
     st.number_input("Täuschung",-10,10, data["fates"]["CHA"]["Täusch"])
     st.number_input("Einschüchtern",-10,10, data["fates"]["CHA"]["Einschüch"])
@@ -158,7 +158,7 @@ with col1:
     
     
 with col2:
-    st.write("Grundwerte")
+    st.header("Grundwerte")
     col21, col22, col23= st.columns(3)
     
     with col21:
