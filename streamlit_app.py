@@ -180,5 +180,7 @@ with col2:
         st.number_input("Charisma",-10,10, data["stats"]["CHA"])
     
     st.header("Fähigkeiten")
-    st.write(data["skills"])
+    
+    for key, value in data["skills"].items():
+        st.write(f"**{key}:** {value}")
     
