@@ -186,4 +186,19 @@ with col2:
     st.header("Kenntnisse")
     for key, values in data["knowledge"].items():
         st.write(f"**{key}:**  \n{', '.join(values)}")
-            
+    
+    st.header("Besitz")        
+    st.subheader("**Ausrüstung**")
+    for values in data["property"]["Ausrüstung"].items():
+        st.write(f"{', '.join(values)}")
+        
+    st.subheader("**Material**")
+    for values in data["property"]["Material"].items():
+        st.write(f"{', '.join(values)}")
+        
+    st.subheader("**Diverses**")
+    for values in data["property"]["Diverses"].items():
+        st.write(f"{', '.join(values)}")
+
+    st.subheader("**Währung**")
+    st.write(str(data["property"]["Währung"]))
