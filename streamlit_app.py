@@ -178,3 +178,7 @@ with col2:
         st.number_input("Intelligenz",-10,10, data["stats"]["INT"])
         st.number_input("Geschicklichkeit",-10,10, data["stats"]["GES"])
         st.number_input("Charisma",-10,10, data["stats"]["CHA"])
+    
+    st.header("Fähigkeiten")
+    st.json(data["skills"])
+    
