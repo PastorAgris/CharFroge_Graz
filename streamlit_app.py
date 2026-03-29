@@ -2,6 +2,10 @@ import streamlit as st
 import json
 from pathlib import Path
 
+# =====================================
+# Default Character
+# =====================================
+
 CHARACTER = {
     "name": ["Albert", "m"],
     "class": "Penner",
@@ -100,26 +104,28 @@ CHARACTER = {
 SAVE_FILE = Path("character.json")
 
 
+# =====================================
+# Helpers
+# =====================================
+
 def load_character():
     if SAVE_FILE.exists():
         with open(SAVE_FILE, "r", encoding="utf-8") as f:
             return json.load(f)
-    else:
-        with open(SAVE_FILE, "w", encoding="utf-8") as f:
-            json.dump(CHARACTER, f, indent=2, ensure_ascii=False)
-        return CHARACTER
-
-
-def text_to_list(text):
-    # erlaubt sowohl Zeilenumbrüche als auch Kommas
-    raw_items = []
-    for line in text.splitlines():
-        raw_items.extend(line.split(","))
-    return [item.strip() for item in raw_items if item.strip()]
+    with open(SAVE_FILE, "w", encoding="utf-8") as f:
+        json.dump(CHARACTER, f, indent=2, ensure_ascii=False)
+    return CHARACTER
 
 
 def list_to_text(items):
     return "\n".join(items)
+
+
+def text_to_list(text):
+    raw_items = []
+    for line in text.splitlines():
+        raw_items.extend(line.split(","))
+    return [item.strip() for item in raw_items if item.strip()]
 
 
 def save_character():
@@ -158,13 +164,12 @@ def save_character():
     data["basevals"]["Resis"] = st.session_state.base_resis
 
     data["stats"]["STÄ"] = st.session_state.stat_sta
-    data["stats"]["WIS"] = st.session_state.stat_wis
-    data["stats"]["KON"] = st.session_state.stat_kon
     data["stats"]["INT"] = st.session_state.stat_int
+    data["stats"]["WIS"] = st.session_state.stat_wis
     data["stats"]["GES"] = st.session_state.stat_ges
+    data["stats"]["KON"] = st.session_state.stat_kon
     data["stats"]["CHA"] = st.session_state.stat_cha
 
-    # property bearbeitbar machen
     data["property"]["Ausrüstung"] = text_to_list(st.session_state.prop_ausruestung)
     data["property"]["Material"] = text_to_list(st.session_state.prop_material)
     data["property"]["Diverses"] = text_to_list(st.session_state.prop_diverses)
@@ -174,50 +179,94 @@ def save_character():
         json.dump(data, f, indent=2, ensure_ascii=False)
 
 
+# =====================================
+# Init
+# =====================================
+
 if "data" not in st.session_state:
     st.session_state.data = load_character()
 
 data = st.session_state.data
 
+# property-Felder nur einmal initialisieren
+if "prop_ausruestung" not in st.session_state:
+    st.session_state.prop_ausruestung = list_to_text(data["property"]["Ausrüstung"])
+
+if "prop_material" not in st.session_state:
+    st.session_state.prop_material = list_to_text(data["property"]["Material"])
+
+if "prop_diverses" not in st.session_state:
+    st.session_state.prop_diverses = list_to_text(data["property"]["Diverses"])
+
+if "prop_waehrung" not in st.session_state:
+    st.session_state.prop_waehrung = float(data["property"]["Währung"])
+
+
+# =====================================
+# UI
+# =====================================
+
+st.set_page_config(page_title="DnD Character Sheet", layout="wide")
+
 st.title("DnD Character Sheet")
 
-name = st.text_input("Name", data["name"][0], key="name_input", on_change=save_character)
-job = st.text_input("Klasse", data["class"], key="class_input", on_change=save_character)
-level = st.number_input("Stufe", 1, 20, data["level"], key="level_input", on_change=save_character)
+name = st.text_input(
+    "Name",
+    value=data["name"][0],
+    key="name_input",
+    on_change=save_character
+)
+
+job = st.text_input(
+    "Klasse",
+    value=data["class"],
+    key="class_input",
+    on_change=save_character
+)
+
+level = st.number_input(
+    "Stufe",
+    min_value=1,
+    max_value=20,
+    value=data["level"],
+    key="level_input",
+    on_change=save_character
+)
 
 if data["name"][1] == "m":
     st.write(f"{name} ist ein Level {level} {job}")
-if data["name"][1] == "w":
+elif data["name"][1] == "w":
     st.write(f"{name} ist eine Level {level} {job}")
 
 col1, col2 = st.columns(2)
 
 with col1:
     st.header("Geschicke")
-    st.subheader("**Stärke**")
+
+    st.subheader("Stärke")
     st.number_input("Kraft", -10, 10, data["fates"]["STÄ"]["Kraft"], key="fate_sta_kraft", on_change=save_character)
     st.number_input("Überleben", -10, 10, data["fates"]["STÄ"]["Überlf"], key="fate_sta_ueberlf", on_change=save_character)
 
-    st.subheader("**Intelligenz**")
+    st.subheader("Intelligenz")
     st.number_input("Kreativität", -10, 10, data["fates"]["INT"]["Kreat"], key="fate_int_kreat", on_change=save_character)
     st.number_input("Entlarvung", -10, 10, data["fates"]["INT"]["Entlarv"], key="fate_int_entlarv", on_change=save_character)
     st.number_input("Wahrnehmung", -10, 10, data["fates"]["INT"]["Wahrn"], key="fate_int_wahrn", on_change=save_character)
     st.number_input("Nachforschung", -10, 10, data["fates"]["INT"]["Nachfor"], key="fate_int_nachfor", on_change=save_character)
     st.number_input("Naturkunde", -10, 10, data["fates"]["INT"]["Naturk"], key="fate_int_naturk", on_change=save_character)
 
-    st.subheader("**Wissen**")
+    st.subheader("Wissen")
     st.number_input("Religion", -10, 10, data["fates"]["WIS"]["Rel"], key="fate_wis_rel", on_change=save_character)
     st.number_input("Geschichte", -10, 10, data["fates"]["WIS"]["Gesch"], key="fate_wis_gesch", on_change=save_character)
     st.number_input("Medizin", -10, 10, data["fates"]["WIS"]["Med"], key="fate_wis_med", on_change=save_character)
     st.number_input("Technik", -10, 10, data["fates"]["WIS"]["Tech"], key="fate_wis_tech", on_change=save_character)
     st.number_input("Umgang mit Tieren", -10, 10, data["fates"]["WIS"]["UmgTiere"], key="fate_wis_umgtiere", on_change=save_character)
 
-    st.subheader("**Geschicklichkeit**")
+    st.subheader("Geschicklichkeit")
     st.number_input("Akrobatik", -10, 10, data["fates"]["GES"]["Akro"], key="fate_ges_akro", on_change=save_character)
     st.number_input("Verstohlenheit", -10, 10, data["fates"]["GES"]["Verst"], key="fate_ges_verst", on_change=save_character)
     st.number_input("Fingerfertigkeit", -10, 10, data["fates"]["GES"]["Fingerf"], key="fate_ges_fingerf", on_change=save_character)
 
-    st.subheader("**Charisma**")
+    st.subheader("Charisma")
     st.number_input("Überzeugungsfähigkeit", -10, 10, data["fates"]["CHA"]["Überzeug"], key="fate_cha_ueberzeug", on_change=save_character)
     st.number_input("Täuschung", -10, 10, data["fates"]["CHA"]["Täusch"], key="fate_cha_taeusch", on_change=save_character)
     st.number_input("Einschüchtern", -10, 10, data["fates"]["CHA"]["Einschüch"], key="fate_cha_einschuech", on_change=save_character)
@@ -263,7 +312,6 @@ with col2:
     st.subheader("Ausrüstung")
     st.text_area(
         "Ausrüstung bearbeiten",
-        value=list_to_text(data["property"]["Ausrüstung"]),
         key="prop_ausruestung",
         height=180,
         on_change=save_character
@@ -272,7 +320,6 @@ with col2:
     st.subheader("Material")
     st.text_area(
         "Material bearbeiten",
-        value=list_to_text(data["property"]["Material"]),
         key="prop_material",
         height=100,
         on_change=save_character
@@ -281,7 +328,6 @@ with col2:
     st.subheader("Diverses")
     st.text_area(
         "Diverses bearbeiten",
-        value=list_to_text(data["property"]["Diverses"]),
         key="prop_diverses",
         height=80,
         on_change=save_character
@@ -292,7 +338,6 @@ with col2:
         "Währung bearbeiten",
         min_value=0.0,
         step=0.01,
-        value=float(data["property"]["Währung"]),
         key="prop_waehrung",
         on_change=save_character
     )
