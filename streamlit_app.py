@@ -90,7 +90,7 @@ CHARACTER = {
     },
     "property":{
         "Ausrüstung":[
-            "iphone", "EarPods", "$ USBs", "Kamm", "Schloss", 
+            "iphone", "EarPods", "3 USBs", "Kamm", "Schloss", 
             "Kondom: ubk. Datum", "Mikrofasertuch", "ÖBB-Karte", 
             "3 MTG Decks", "McFit-Karte", "BC-Karte", "Bier", 
             "Rucksack", "Jacke", "eCard", "AIDS-Beratungspass"
